@@ -5,6 +5,8 @@ from tkinter.messagebox import askokcancel, WARNING
 import Helpers
 from functools import partial
 
+
+
 #Comentario de prueba
 class CenterWidgetMixin:
     def center(self,):
@@ -79,8 +81,70 @@ class CreateClientWindows(Toplevel, CenterWidgetMixin):
         #Destruye la subventada y actualzia el frame
         self.destroy()
         self.update()
-        
+      
+class EditClienteWindows(Toplevel, CenterWidgetMixin):
+    def __init__(self, padre):
+        super().__init__(padre)
+        self.validaciones = [True, True]
+        self.title("Editar Cliente")
+        self.build()
+        self.center()
+        self.transient(padre)
+        self.grab_set()
+    
+    def editar_cliente(self):
+        pass           
+    
+    def build(self):
+        frame = Frame(self)
+        frame.pack(padx=20, pady=10)
+        Label(frame, text="DUI(No Editable)").grid(row=0, column=0)
+        Label(frame, text="Nombres").grid(row=0, column=1)
+        Label(frame, text="Apellidos").grid(row=0, column=2)
 
+        dui = Entry(frame)
+        dui.grid(row=1, column=0)
+        nombres = Entry(frame)
+        nombres.grid(row=1, column=1)
+        nombres.bind("<KeyRelease>", lambda event: self.validate(event,0))
+        apellidos = Entry(frame)
+        apellidos.grid(row=1, column=2)
+        apellidos.bind("<KeyRelease>", lambda event: self.validate(event,1))
+
+        
+        frame2 = Frame(self)
+        frame2.pack(pady=10)
+        self.btncrear = Button(frame2, text="Modificar", command=self.editar_cliente)
+        self.btncrear.grid(row=0, column=0)
+        Button(frame2, text="Cancelar", command=self.close).grid(row=0, column=1)
+        
+        self.dui = dui
+        self.apellido =apellidos
+        self.nombre = nombres
+        
+        cliente = self.master.treeview.focus()
+        campos = self.master.treeview.item(cliente, "values")
+        dui.insert(0, campos[0])
+        dui.config(state= DISABLED)
+        nombres.insert(0, campos[1])
+        apellidos.insert(0, campos[2])
+   
+    def validate(self, event, indice):
+        valor = event.widget.get()
+        valido = (valor.isalpha() and len(valor)>=2 and len(valor)<=30)
+        event.widget.configure(bg="Green") if valido else event.widget.configure(bg="Red")
+        self.validaciones[indice] = valido
+        print(self.validaciones)
+        if self.validaciones != [True, True]:
+            self.btncrear.config(state=DISABLED)
+
+
+    def close(self):
+        #Destruye la subventada y actualzia el frame
+        self.destroy()
+        self.update()
+            
+        
 class MainWindow(Tk, CenterWidgetMixin): # edited
    
     def __init__(self):
@@ -124,7 +188,7 @@ class MainWindow(Tk, CenterWidgetMixin): # edited
        frame = Frame(self)
        frame.pack(pady=20)
        Button(frame, text="Crear", command=self.Crear).grid(row=0, column=0)
-       Button(frame, text="Modificar", command=None).grid(row=0, column=1)
+       Button(frame, text="Modificar", command=self.Editar).grid(row=0, column=1)
        Button(frame, text="Borrar", command=self.Borrar).grid(row=0, column=2)
 
        
@@ -142,6 +206,10 @@ class MainWindow(Tk, CenterWidgetMixin): # edited
     
     def Crear(self):
         CreateClientWindows(self)
+    
+    def Editar(self):
+        if self.treeview.focus():
+            EditClienteWindows(self)
 
 if __name__ == "__main__":
     app = MainWindow()
