@@ -34,6 +34,7 @@ class CreateClientWindows(Toplevel, CenterWidgetMixin):
         self.master.treeview.insert(
                parent="",index="end", iid=self.dui,
                values=(self.dui.get(), self.nombre.get(), self.apellido.get()))
+        db.Clientes.crearCliente(self.dui.get(), self.nombre.get(), self.apellido.get())
         self.close()
            
     
@@ -94,7 +95,8 @@ class EditClienteWindows(Toplevel, CenterWidgetMixin):
     
     def editar_cliente(self):
         cliente = self.master.treeview.focus()
-        campos = self.master.treeview.item(cliente,values=(self.dui.get(), self.nombre.get(), self.apellido.get()))
+        self.master.treeview.item(cliente,values=(self.dui.get(), self.nombre.get(), self.apellido.get()))
+        db.Clientes.Modificar(self.dui.get(), self.nombre.get(), self.apellido.get())
         self.close()           
     
     def build(self):
@@ -205,6 +207,9 @@ class MainWindow(Tk, CenterWidgetMixin): # edited
                 message= f"¿Borrar a {campos[1]} {campos[2]}",
                 icon = WARNING
             )
+        if confitmar:
+            self.treeview.delete(cliente)
+            db.Clientes.Eliminar(campos[0])
             
     
     def Crear(self):
