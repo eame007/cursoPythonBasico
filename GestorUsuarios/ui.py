@@ -93,7 +93,9 @@ class EditClienteWindows(Toplevel, CenterWidgetMixin):
         self.grab_set()
     
     def editar_cliente(self):
-        pass           
+        cliente = self.master.treeview.focus()
+        campos = self.master.treeview.item(cliente,values=(self.dui.get(), self.nombre.get(), self.apellido.get()))
+        self.close()           
     
     def build(self):
         frame = Frame(self)
@@ -130,6 +132,7 @@ class EditClienteWindows(Toplevel, CenterWidgetMixin):
         apellidos.insert(0, campos[2])
    
     def validate(self, event, indice):
+        self.btncrear.config(state=NORMAL)
         valor = event.widget.get()
         valido = (valor.isalpha() and len(valor)>=2 and len(valor)<=30)
         event.widget.configure(bg="Green") if valido else event.widget.configure(bg="Red")
