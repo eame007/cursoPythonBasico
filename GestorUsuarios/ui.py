@@ -5,7 +5,7 @@ from tkinter.messagebox import askokcancel, WARNING
 import Helpers
 from functools import partial
 
-
+#Comentario de prueba
 class CenterWidgetMixin:
     def center(self,):
         self.update()
