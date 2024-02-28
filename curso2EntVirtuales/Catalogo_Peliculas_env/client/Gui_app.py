@@ -1,5 +1,9 @@
 import tkinter as tk
 
+def barra_menu(ventana):
+    barra_menu = tk.Menu(ventana)
+    ventana.config(menu = barra_menu)
+
 class Frame(tk.Frame):
     
     def __init__(self, ventana = None):
