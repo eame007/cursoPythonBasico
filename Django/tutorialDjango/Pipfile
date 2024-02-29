@@ -12,4 +12,5 @@ django = "*"
 python_version = "3.11"
 
 [scripts]
-server = "python manage.py runserver"
+server =  "python manage.py runserver"
+

@@ -1,5 +1,5 @@
 import tkinter as tk
-from  client.Gui_app import  Frame
+from  client.Gui_app import  Frame, barra_menu
 
 def main():# Crear la ventana
     ventana = tk.Tk()
@@ -10,6 +10,7 @@ def main():# Crear la ventana
     ventana.iconphoto(True, icono)
     ventana.resizable(1,1)
     app = Frame(ventana = ventana)
+    barra_menu(ventana)
     app.mainloop() 
 
 if __name__ == '__main__':
